@@ -18,7 +18,7 @@ export default async function (tree: Tree, schema: GeneratorOptions) {
       options: {
         commands: [
           {
-            command: 'npx graphql-codegen --config libs/bookmark/data-access-bookmark/codegen.yml',
+            command: `npx graphql-codegen --config libs/bookmark/data-access-bookmark/codegen.yml`,
           },
         ],
       },

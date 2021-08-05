@@ -1,6 +1,6 @@
 import React from 'react';
 import { useMeViewModel } from '@readable/shared/data-access-me';
-import { Profile } from '@readable/ui';
+
 import { useRouter } from 'next/router';
 
 export const Home = React.memo(() => {

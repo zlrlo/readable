@@ -3,9 +3,16 @@
   "id": "creating-generator",
   "type": "object",
   "properties": {
+    "pageName": {
+      "type": "string",
+      "description": "page 또는 section 이름 ",
+      "$default": {
+        "$source": "pageName"
+      }
+    },
     "name": {
       "type": "string",
-      "description": "Library name",
+      "description": "Library 이름 ",
       "$default": {
         "$source": "argv",
         "index": 0
@@ -13,7 +20,7 @@
     },
     "type": {
       "type": "string",
-      "description": "Provide the library type, such as 'data-access' or 'state'",
+      "description": "Library 타입 ",
       "x-prompt": {
         "message": "Which type of library would you like to generate?",
         "type": "list",
@@ -34,5 +41,5 @@
       }
     }
   },
-  "required": ["name"]
+  "required": ["name", "type"]
 }
