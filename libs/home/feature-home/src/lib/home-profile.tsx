@@ -6,12 +6,12 @@ export const HomeProfile = () => {
   const { me, loading, error } = useMeViewModel();
   const router = useRouter();
 
+  // TODO(zlrlo): loading UI 개선 필요
   if (loading) {
-    console.log('TCL: HomeProfile -> loading', loading);
+    return <div>loading...</div>;
   }
 
   if (error) {
-    console.log('TCL: HomeProfile -> error', error);
     router.push('/login');
   }
 
