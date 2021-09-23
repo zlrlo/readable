@@ -18,8 +18,8 @@ export function ShadowCard({ cardImageUrl, description, siteName, profileImageUr
     return `${src}?w=${width}&q=${quality || 75}`;
   };
 
-  const colors = ['gray', 'red', 'yellow', 'green', 'blue', 'indigo', 'purple', 'pink'];
-  const bgColor = `bg-${colors[index % 9]}-400`;
+  const COLOR_NUMBER = 8;
+  const randomNumber = index % COLOR_NUMBER;
 
   return (
     <div className="shadow-offset-black overflow-hidden">
@@ -42,7 +42,13 @@ export function ShadowCard({ cardImageUrl, description, siteName, profileImageUr
         </div>
       </div>
       {/* Contents */}
-      <div className={`p-4 opacity-90 ${bgColor}`}>
+      <div
+        className={`p-4 opacity-90 ${index === 0 && 'bg-gray-400'} ${index === 1 && 'bg-red-400'} ${
+          index === 2 && 'bg-yellow-400'
+        } ${index === 3 && 'bg-green-400'} ${index === 4 && 'bg-blue-400'} ${index === 5 && 'bg-indigo-400'} ${
+          index === 6 && 'bg-purple-400'
+        } ${index === 7 && 'bg-pink-400'}`}
+      >
         <div className="flex -mx-2">
           {/* 내용 영역 */}
           <div className="w-3/5 mx-2">
@@ -74,7 +80,13 @@ export function ShadowCard({ cardImageUrl, description, siteName, profileImageUr
         </div>
       </div>
       {/* Footer */}
-      <div className={`py-3 px-4 ${bgColor} flex flex-wrap justify-between items-center text-white text-xs`}>
+      <div
+        className={`py-3 px-4 flex flex-wrap justify-between items-center text-white text-xs ${
+          index === 0 && 'bg-gray-400'
+        } ${index === 1 && 'bg-red-400'} ${index === 2 && 'bg-yellow-400'} ${index === 3 && 'bg-green-400'} ${
+          index === 4 && 'bg-blue-400'
+        } ${index === 5 && 'bg-indigo-400'} ${index === 6 && 'bg-purple-400'} ${index === 7 && 'bg-pink-400'}`}
+      >
         <div className="flex items-center">
           <div className="border-2 rounded-md w-5 h-5" />
           <div className="ml-2">{siteName}</div>
