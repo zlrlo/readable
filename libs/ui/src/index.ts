@@ -22,3 +22,4 @@ export * from './lib/avatar/action-avatars';
 export * from './lib/hashtag/hashtags';
 export * from './lib/header/main-header';
 export * from './lib/navigation/tabs-with-underline';
+export * from '../../home/feature-home/src/lib/home-search-dropdown-menu';

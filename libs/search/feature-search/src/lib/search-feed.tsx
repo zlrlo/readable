@@ -6,11 +6,9 @@ import { useRouter } from 'next/router';
 export const SearchFeed = () => {
   const router = useRouter();
   const { query } = router.query;
-  console.log('TCL: SearchFeed -> query', query);
 
   const searchQuery = Array.isArray(query) ? '' : query ?? '';
-
-  // TODO(zlrlo): 리팩토링 필요
+  // TODO(zlrlo): 페이지네이션으로 변경 필요
   const { entries } = useDataAccessSearch(searchQuery);
 
   return (

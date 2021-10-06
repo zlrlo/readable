@@ -5,5 +5,5 @@
     "outDir": ""
   },
   "exclude": ["../**/*.spec.ts", "../**/*.spec.js", "../**/*.spec.tsx", "../**/*.spec.jsx"],
-  "include": ["../src/**/*", "*.js", "../**.ts"]
+  "include": ["../src/**/*", "*.js", "../**.ts", "../../home/feature-home/src/lib/search-dropdown-menu.tsx"]
 }

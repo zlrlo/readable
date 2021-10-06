@@ -3,21 +3,21 @@ import { useRef } from 'react';
 
 export type FormWithUnderlineProps = {
   inputValue?: string;
-  handleSubmit?: (inputValue: string) => void;
+  onSubmit?: (inputValue: string) => void;
 };
 
-export function FormWithUnderline({ inputValue, handleSubmit }: FormWithUnderlineProps) {
+export function FormWithUnderline({ inputValue, onSubmit }: FormWithUnderlineProps) {
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const onSubmit = (e: any) => {
+  const handleSubmit = (e: any) => {
     e.preventDefault();
     if (inputRef.current) {
-      handleSubmit && handleSubmit(inputRef.current.value ?? '');
+      onSubmit && onSubmit(inputRef.current.value ?? '');
     }
   };
 
   return (
-    <form onSubmit={onSubmit} className="w-full">
+    <form onSubmit={handleSubmit} className="w-full">
       <div className="flex items-center border-b border-gray-500">
         <button className="flex-shrink-0  py-1 px-2" type="button">
           <SearchIcon className="w-10 h-10 text-gray-500" />

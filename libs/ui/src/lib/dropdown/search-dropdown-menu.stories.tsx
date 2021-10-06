@@ -1,5 +1,8 @@
 import { Meta, Story } from '@storybook/react';
-import { SearchDropdownMenu, SearchDropdownMenuProps } from './search-dropdown-menu';
+import {
+  SearchDropdownMenu,
+  SearchDropdownMenuProps,
+} from '../../../../home/feature-home/src/lib/home-search-dropdown-menu';
 
 export default {
   title: 'Dropdown/SearchDropdownMenu',
