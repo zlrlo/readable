@@ -11,12 +11,14 @@ gql`
 `;
 
 export function useDataAccessOnboarding() {
-  const [updateNickName, { loading: isUpdateNickNameLoading }] = useSetNickNameOnHomeMutation();
+  const [updateNickName, { loading: isUpdateNickNameLoading }] = useSetNickNameOnHomeMutation({
+    onCompleted: ({ setNickName: { nickName } }) => {
+      router.push(`/${nickName}`);
+    },
+  });
 
-  const setNickName = async (nickName: string) => {
-    //   에러 처리 필요
-    await updateNickName({ variables: { setNickNameInput: { nickName } } });
-    router.push(`/${nickName}`);
+  const setNickName = (nickName: string) => {
+    updateNickName({ variables: { setNickNameInput: { nickName } } });
   };
 
   return { setNickName, isUpdateNickNameLoading };

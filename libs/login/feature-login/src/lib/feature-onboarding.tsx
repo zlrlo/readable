@@ -15,26 +15,38 @@ enum OnboardingStep {
   Tag,
 }
 
+const OnboardingPageData = [
+  {
+    step: OnboardingStep.Nickname,
+    title: '사용자 이름 만들기',
+    description: '새 계정에 사용할 사용자 이름을 선택하세요. 나중에 언제든지 변경할 수 있습니다.',
+  },
+  {
+    step: OnboardingStep.Tag,
+    title: 'Pick your interests',
+    description: 'Select 3-5 different topic',
+  },
+];
+
 export const FeatureOnboarding = () => {
   const { setNickName } = useDataAccessOnboarding();
 
   const [onboardingStep, setOnboardingStep] = useState(OnboardingStep.Nickname);
 
+  const lastOnboardingStep = OnboardingPageData.length - 1;
+
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isValid, isDirty },
     getValues,
   } = useForm<FormInputs>({
-    mode: 'onSubmit',
+    mode: 'onBlur',
     reValidateMode: 'onChange',
     defaultValues: {},
-    resolver: undefined,
-    context: undefined,
     criteriaMode: 'firstError',
     shouldFocusError: true,
     shouldUseNativeValidation: false,
-    delayError: undefined,
   });
 
   const onSubmit = () => {
@@ -43,65 +55,82 @@ export const FeatureOnboarding = () => {
   };
 
   const onNextStepButtonClick = () => {
-    if (onboardingStep === OnboardingStep.Tag) {
+    if (onboardingStep === lastOnboardingStep) {
       onSubmit();
+      return;
     }
-    setOnboardingStep(OnboardingStep.Tag);
+
+    if (isValid) {
+      setOnboardingStep(prevOnboardingStep => {
+        return prevOnboardingStep + 1;
+      });
+    }
   };
 
   const onPrevStepButtonClick = () => {
-    setOnboardingStep(OnboardingStep.Nickname);
+    setOnboardingStep(prevOnboardingStep => {
+      return prevOnboardingStep - 1;
+    });
+  };
+
+  const renderInput = () => {
+    if (onboardingStep === OnboardingStep.Nickname) {
+      return (
+        <div className="sm:mt-16 mt-9 sm:mb-44 mb-20">
+          <input
+            type="text"
+            {...register('nickname', { required: 'Please enter your nickname.' })}
+            placeholder="사용자 이름"
+            className="sm:py-6 sm:px-5 max-w-sm w-full"
+          />
+
+          <ErrorMessage
+            errors={errors}
+            name="nickname"
+            render={({ message }) => (
+              <div className="text-red-600 mt-3 flex space-x-2">
+                <div className="w-5 h-5">
+                  <MinusCircleIcon />
+                </div>
+                <p className="">{message}</p>
+              </div>
+            )}
+          />
+        </div>
+      );
+    }
+
+    return;
   };
 
   return (
     <LoginLayout>
       <div className="text-black">
         <div className="space-y-3">
-          <div className="lg:text-5xl sm:text-4xl text-2xl font-bold">
-            {onboardingStep === OnboardingStep.Nickname && '사용자 이름 만들기'}
-            {onboardingStep === OnboardingStep.Tag && 'Pick your interests'}
-          </div>
-          <div className="text-gray-400 sm:text-xl text-sm">
-            {onboardingStep === OnboardingStep.Nickname &&
-              '새 계정에 사용할 사용자 이름을 선택하세요. 나중에 언제든지 변경할 수 있습니다.'}
-            {onboardingStep === OnboardingStep.Tag && 'Select 3-5 different topic'}
-          </div>
+          <div className="lg:text-5xl sm:text-4xl text-2xl font-bold">{OnboardingPageData[onboardingStep].title}</div>
+          <div className="text-gray-400 sm:text-xl text-sm">{OnboardingPageData[onboardingStep].description}</div>
         </div>
 
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col">
-          <div className="sm:mt-16 mt-9 sm:mb-44 mb-20">
-            <input
-              type="text"
-              {...register('nickname', { required: 'Please enter your nickname.' })}
-              placeholder="사용자 이름"
-              className="sm:py-6 sm:px-5 max-w-sm w-full"
-            />
-
-            <ErrorMessage
-              errors={errors}
-              name="nickname"
-              render={({ message }) => (
-                <div className="text-red-600 mt-3 flex space-x-2">
-                  <div className="w-5 h-5">
-                    <MinusCircleIcon />
-                  </div>
-                  <p className="">{message}</p>
-                </div>
-              )}
-            />
-          </div>
+          {renderInput()}
 
           <div className="ml-auto space-x-2 flex items-center">
             <button
+              type="button"
               onClick={onPrevStepButtonClick}
               className="sm:w-24 w-14 sm:h-24 h-14 rounded-full bg-gray-200 disabled:opacity-50"
-              disabled={onboardingStep === OnboardingStep.Nickname ? true : false}
+              disabled={!Boolean(onboardingStep)}
             >
               <div className="sm:w-11 w-8 sm:h-11 h-8 mx-auto">
                 <ChevronLeftIcon />
               </div>
             </button>
-            <button onClick={onNextStepButtonClick} className="sm:w-24 w-14 sm:h-24 h-14 rounded-full bg-gray-200">
+            <button
+              type="button"
+              onClick={onNextStepButtonClick}
+              className="sm:w-24 w-14 sm:h-24 h-14 rounded-full bg-gray-200 disabled:opacity-50"
+              disabled={!isDirty || !isValid}
+            >
               <div className="sm:w-11 w-8 sm:h-11 h-8 mx-auto">
                 <ChevronRightIcon />
               </div>

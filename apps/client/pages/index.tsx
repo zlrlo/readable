@@ -7,7 +7,7 @@ import Head from 'next/head';
 function Home() {
   const { me, isMeDataLoading } = useMe({ redirectTo: '/login', fetchPolicy: 'network-only' });
 
-  if (!me || isMeDataLoading) {
+  if (!me || isMeDataLoading || !me.nickName) {
     return (
       <div className="h-screen flex items-center justify-center">
         <Loading />
