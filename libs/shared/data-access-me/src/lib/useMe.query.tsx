@@ -34,7 +34,8 @@ export function useMe({ redirectTo, fetchPolicy }: useMeType) {
     router.push(redirectTo);
   }
 
-  if (meData && !meData?.me.nickName) {
+  // 개발 중
+  if (meData && meData?.me.nickName) {
     router.push('/login/welcome');
   }
 

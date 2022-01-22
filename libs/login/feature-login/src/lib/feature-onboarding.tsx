@@ -1,13 +1,14 @@
 import { useDataAccessOnboarding } from '@readable/home/data-access-home';
 import { LoginLayout } from './login-layout';
-import { useForm } from 'react-hook-form';
-import { ErrorMessage } from '@hookform/error-message';
-import { MinusCircleIcon } from '@heroicons/react/solid';
+import { FormProvider, useFieldArray, useForm } from 'react-hook-form';
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/outline';
 import { useState } from 'react';
+import { OnboardingNickname } from './onboarding-nickname';
+import { OnboardingTags } from './onboarding-tags';
 
-type FormInputs = {
+type FormValues = {
   nickname: string;
+  tags: { name: string }[];
 };
 
 enum OnboardingStep {
@@ -35,12 +36,7 @@ export const FeatureOnboarding = () => {
 
   const lastOnboardingStep = OnboardingPageData.length - 1;
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors, isValid, isDirty },
-    getValues,
-  } = useForm<FormInputs>({
+  const method = useForm<FormValues>({
     mode: 'onBlur',
     reValidateMode: 'onChange',
     defaultValues: {},
@@ -48,6 +44,12 @@ export const FeatureOnboarding = () => {
     shouldFocusError: true,
     shouldUseNativeValidation: false,
   });
+
+  const {
+    handleSubmit,
+    formState: { errors, isValid, isDirty },
+    getValues,
+  } = method;
 
   const onSubmit = () => {
     const { nickname } = getValues();
@@ -75,29 +77,11 @@ export const FeatureOnboarding = () => {
 
   const renderInput = () => {
     if (onboardingStep === OnboardingStep.Nickname) {
-      return (
-        <div className="sm:mt-16 mt-9 sm:mb-44 mb-20">
-          <input
-            type="text"
-            {...register('nickname', { required: 'Please enter your nickname.' })}
-            placeholder="사용자 이름"
-            className="sm:py-6 sm:px-5 max-w-sm w-full"
-          />
+      return <OnboardingNickname />;
+    }
 
-          <ErrorMessage
-            errors={errors}
-            name="nickname"
-            render={({ message }) => (
-              <div className="text-red-600 mt-3 flex space-x-2">
-                <div className="w-5 h-5">
-                  <MinusCircleIcon />
-                </div>
-                <p className="">{message}</p>
-              </div>
-            )}
-          />
-        </div>
-      );
+    if (onboardingStep === OnboardingStep.Tag) {
+      return <OnboardingTags />;
     }
 
     return;
@@ -111,32 +95,34 @@ export const FeatureOnboarding = () => {
           <div className="text-gray-400 sm:text-xl text-sm">{OnboardingPageData[onboardingStep].description}</div>
         </div>
 
-        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col">
-          {renderInput()}
+        <FormProvider {...method}>
+          <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col">
+            {renderInput()}
 
-          <div className="ml-auto space-x-2 flex items-center">
-            <button
-              type="button"
-              onClick={onPrevStepButtonClick}
-              className="sm:w-24 w-14 sm:h-24 h-14 rounded-full bg-gray-200 disabled:opacity-50"
-              disabled={!Boolean(onboardingStep)}
-            >
-              <div className="sm:w-11 w-8 sm:h-11 h-8 mx-auto">
-                <ChevronLeftIcon />
-              </div>
-            </button>
-            <button
-              type="button"
-              onClick={onNextStepButtonClick}
-              className="sm:w-24 w-14 sm:h-24 h-14 rounded-full bg-gray-200 disabled:opacity-50"
-              disabled={!isDirty || !isValid}
-            >
-              <div className="sm:w-11 w-8 sm:h-11 h-8 mx-auto">
-                <ChevronRightIcon />
-              </div>
-            </button>
-          </div>
-        </form>
+            <div className="ml-auto space-x-2 flex items-center">
+              <button
+                type="button"
+                onClick={onPrevStepButtonClick}
+                className="sm:w-24 w-14 sm:h-24 h-14 rounded-full bg-gray-200 disabled:opacity-50"
+                disabled={!Boolean(onboardingStep)}
+              >
+                <div className="sm:w-11 w-8 sm:h-11 h-8 mx-auto">
+                  <ChevronLeftIcon />
+                </div>
+              </button>
+              <button
+                type="button"
+                onClick={onNextStepButtonClick}
+                className="sm:w-24 w-14 sm:h-24 h-14 rounded-full bg-gray-200 disabled:opacity-50"
+                disabled={!isDirty || !isValid}
+              >
+                <div className="sm:w-11 w-8 sm:h-11 h-8 mx-auto">
+                  <ChevronRightIcon />
+                </div>
+              </button>
+            </div>
+          </form>
+        </FormProvider>
       </div>
     </LoginLayout>
   );
