@@ -39,7 +39,7 @@ export function Slider(props: SliderProps) {
           <div
             className={`absolute inset-0 w-screen h-screen ${bgColor} text-white flex items-center justify-center text-5xl transition-all ease-in-out duration-1000 transform 
             ${index === activeSlide ? 'translate-x-0' : 'translate-x-full'}
-            ${index === activeSlide - 1 && '-translate-x-full'}
+            ${index < activeSlide && '-translate-x-full'}
             slide`}
           >
             {value}
